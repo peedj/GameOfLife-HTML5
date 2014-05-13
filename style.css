@@ -1,0 +1,54 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 12.05.2014, 15:15:04
+    Author     : antonshashok
+*/
+
+body { padding-bottom: 70px; }
+
+input.w-50 {
+    max-width: 50px;
+}
+
+canvas {
+    border: 1px solid #444;
+    margin: auto;
+    padding: 0;
+}
+
+.fa-rotate-45 {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=.5);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.fa-rotate-135 {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1.5);
+  -webkit-transform: rotate(135deg);
+  -moz-transform: rotate(135deg);
+  -ms-transform: rotate(135deg);
+  -o-transform: rotate(135deg);
+  transform: rotate(135deg);
+}
+.fa-rotate-215 {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2.5);
+  -webkit-transform: rotate(215deg);
+  -moz-transform: rotate(215deg);
+  -ms-transform: rotate(215deg);
+  -o-transform: rotate(215deg);
+  transform: rotate(215deg);
+}
+.fa-rotate-305 {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3.5);
+  -webkit-transform: rotate(305deg);
+  -moz-transform: rotate(305deg);
+  -ms-transform: rotate(305deg);
+  -o-transform: rotate(305deg);
+  transform: rotate(305deg);
+}
