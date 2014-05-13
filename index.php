@@ -5,8 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <META NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW">
-        <META name="keywords" content=""> 
-        <META name="description" content=""> 
 
         <link REL="SHORTCUT ICON" HREF="favicon.ico">
         <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -46,6 +44,8 @@
                     })
 
             function LifeAppController($scope) {
+
+                // INIT
                 $scope.gameInterval = 2000 // 2 sec;
                 $scope.gameStatus = 0; // 0 - pause; 1 - play
 
@@ -70,9 +70,7 @@
 
                 $scope.elmscount = 0;
 
-
-
-                // init canvas
+                // INIT canvas
                 $scope.canvas = document.getElementById('lifeCanvas');
                 $scope.context = $scope.canvas.getContext('2d');
 
@@ -134,7 +132,7 @@
                 $('body').mouseup(function(e) {
                     $($scope.canvas).unbind('mousemove');
                 });
-                
+
                 $(window).resize(function(e) {
                     $scope.restartScene();
                 });
@@ -201,7 +199,7 @@
                     if ($scope.gameStatus || force) { // if not paused
                         $scope.preliminarStates = {};
                         $scope.context.clearRect(0, 0, $scope.canvas.width, $scope.canvas.height);
-                        
+
                         var copy = $scope.currentStates;
                         angular.forEach(copy, function(alivex, x) {
                             angular.forEach(copy[x], function(alivey, y) {
@@ -230,7 +228,7 @@
                                 $scope.renderCell(x, y);
                             });
                         });
-                        
+
                         $scope.drawGrid();
                     }
                 }
@@ -302,12 +300,14 @@
                 }
 
 
-                // game
+                // game functions
                 $scope.game = {
                     download: function() {
+                        // download file
                         $("#download").submit();
                     },
                     upload: function() {
+                        // upload file with ajax
                         if (confirm("All unsaved changes will be lost. Continue?"))
                             $("#uploadfilename").change(function() {
                                 var form = $("#upload");
@@ -362,17 +362,6 @@
     </head>
     <body ng-controller="LifeAppController" id="LifeAppController">
         <div id="main-container" class="text-center">
-<!--            <table class="table table-bordered td-w10">
-                <tbody>
-                    <tr ng-repeat="itemx in itemsx">
-                        <td ng-repeat="itemy in itemsy[itemx]">
-                            <a title="{{itemx}}x{{itemy}} ({{currentStates[itemx][itemy]}})" class="cell alive{{currentStates[itemx][itemy]}}" href="#cell-toggle" eat-click ng-click="toggleLife(itemx, itemy)">
-                                {{itemx}}x{{itemy}}
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>-->
             <table align="center">
                 <tbody>
                     <tr>
@@ -482,7 +471,7 @@
     </body>
 </html>
 
-<?
+<?php
 flush();
 if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
     $ip = $_SERVER['HTTP_CLIENT_IP'];
