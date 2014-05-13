@@ -51,6 +51,10 @@
 
                 $scope.currentStates = {"44": {"43": 1, "44": 1, "49": 1, "50": 1, "51": 0}, "45": {"43": 1, "45": 1, "48": 1, "50": 1}, "46": {"43": 1, "48": 0, "50": 1}, "47": {"48": 0}, "48": {"48": 0}, "49": {"48": 0}, "52": {"43": 1, "44": 0, "45": 0, "50": 1}, "53": {"43": 1, "44": 0, "45": 1, "46": 0, "48": 1, "50": 1}, "54": {"43": 1, "44": 1, "45": 0, "49": 1, "50": 1}}; // x,y position states 1/0 alive/not
                 $scope.preliminarStates = {};
+                
+                $scope.games = {
+                    "Gosper’s Glide Gun" : {"23":{"22":1,"23":1},"24":{"22":1,"23":1},"33":{"22":1,"23":1,"24":1},"34":{"21":1,"25":1},"35":{"20":1,"26":1},"36":{"20":1,"26":1},"37":{"23":1},"38":{"21":1,"25":1},"39":{"22":1,"23":1,"24":1},"40":{"23":1},"43":{"20":1,"21":1,"22":1},"44":{"20":1,"21":1,"22":1},"45":{"19":1,"23":1},"47":{"18":1,"19":1,"23":1,"24":1},"57":{"20":1,"21":1},"58":{"20":1,"21":1}}
+                };
 
                 $scope.w = 100;
                 $scope.h = 100;
@@ -341,12 +345,18 @@
                                             $scope.posy = data.posy * 1;
                                             $scope.s = data.s * 1;
                                             $scope.restartScene();
-                                            $scope.redraw();
                                         }
                                     }
                                 });
                             }).click();
                     }
+                }
+                
+                $scope.loadGame = function(data) {
+                    if (!confirm("All unsaved changes will be lost. Continue?"))
+                        return;
+                    $scope.currentStates = data;
+                    $scope.restartScene();
                 }
 
 
@@ -444,6 +454,14 @@
                                 </li>
                                 <li class="disabled">
                                     <a class="disabled" ng-click="game.cloud_upload()" eat-click href="#cloud-load"><i class="fa fa-cloud-upload"></i> load from cloud</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown text-left">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-flash text-warning"></i> Seeds <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="(seed_name, seed) in games">
+                                    <a class="" ng-click="loadGame(seed)" eat-click href="#load-seed"><i class="fa fa-globe"></i> {{seed_name}}</a>
                                 </li>
                             </ul>
                         </li>
