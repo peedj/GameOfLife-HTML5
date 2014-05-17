@@ -2,10 +2,6 @@
 
 > Canvas, HTML5, AngularJS App
 
-
-#### Download & Upload saved games
-The download / upload features need PHP 5.+ @server
-
 **How to build new version with Node.js npm package manager**
 
 ```shell
@@ -13,6 +9,8 @@ npm install
 grunt
 ```
 
+***Download & Upload saved games***
+The download / upload features need PHP 5.+ @server
 
 ## Release History
 
