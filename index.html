@@ -72,7 +72,7 @@
                             <ul class="dropdown-menu">
                                 <li>
                                     <a class="" ng-click="game.download()" eat-click href="#download"><i class="fa fa-download"></i> download game</a>
-                                    <form class="hide" target="_blank" method="post" action="download.php" id="download">
+                                    <form class="hide" target="_blank" method="post" action="server/download.php" id="download">
                                         <textarea name="currentStates">{{currentStates}}</textarea>
                                         <input type="text" value="{{w}}" name="w">
                                         <input type="text" value="{{h}}" name="h">
@@ -83,7 +83,7 @@
                                 </li>
                                 <li>
                                     <a class="" ng-click="game.upload()" eat-click href="#load"><i class="fa fa-upload"></i> load game</a>
-                                    <form class="hide" method="post" action="upload.php" id="upload" enctype="multipart/form-data">
+                                    <form class="hide" method="post" action="server/upload.php" id="upload" enctype="multipart/form-data">
                                         <input type="hidden" name="MAX_FILE_SIZE" value="1194304" /> 
                                         <input type="file" name="game" id="uploadfilename">
                                     </form>
