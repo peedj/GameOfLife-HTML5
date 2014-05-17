@@ -1,0 +1,27 @@
+{
+  "name": "GameOfLife",
+  "version": "0.1.1",
+  "homepage": "https://github.com/peedj/GameOfLife-HTML5.git",
+  "authors": [
+    "Anton Shashok <peedjack@gmail.com>"
+  ],
+  "description": "Test qualify project",
+  "main": "index.html",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "game",
+    "life",
+    "full",
+    "universe"
+  ],
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "jquery": ">= 1.9.0",
+    "fontawesome": ">= 4.0.3",
+    "bootstrap": ">= 3.1.1",
+    "angular": ">= 1.2.9"
+  }
+}

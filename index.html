@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="LifeApp">
+    <head>
+        <title>Game of Life</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <META NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW">
+        <link REL="SHORTCUT ICON" HREF="favicon.ico">
+        
+        <script src="build/js/scripts.js"></script>
+        <link rel="stylesheet" type="text/css" href="build/css/styles.min.css" media="screen" />
+    </head>
+    <body ng-controller="LifeAppController" id="LifeAppController">
+        <div id="main-container" class="text-center">
+            <table align="center">
+                <tbody>
+                    <tr>
+                        <td>
+                            <button class="btn btn-default" ng-mousedown="moveView(-1, -1)" eat-click><i class="fa fa-long-arrow-up fa-rotate-305 fa-fw"></i></button>
+                        </td>
+                        <td>
+                            <button class="btn btn-default" ng-mousedown="moveView(0, -1)" eat-click><i class="fa fa-long-arrow-up fa-fw"></i></button>
+                        </td>
+                        <td>
+                            <button class="btn btn-default" ng-mousedown="moveView(1, -1)" eat-click><i class="fa fa-long-arrow-up fa-rotate-45 fa-fw"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-default" ng-mousedown="moveView(-1, 0)" eat-click><i class="fa fa-long-arrow-left fa-fw"></i></button>
+                        </td>
+                        <td>
+                            <canvas id="lifeCanvas"></canvas>
+                        </td>
+                        <td>
+                            <button class="btn btn-default" ng-mousedown="moveView(1, 0)" eat-click><i class="fa fa-long-arrow-right fa-fw"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-default" ng-mousedown="moveView(-1, 1)" eat-click><i class="fa fa-long-arrow-up fa-rotate-215 fa-fw"></i></button>
+                        </td>
+                        <td>
+                            <button class="btn btn-default" ng-mousedown="moveView(0, 1)" eat-click><i class="fa fa-long-arrow-down fa-fw"></i></button>
+                        </td>
+                        <td>
+                            <button class="btn btn-default" ng-mousedown="moveView(1, 1)" eat-click><i class="fa fa-long-arrow-up fa-rotate-135 fa-fw"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">Game of Life {{w}}x{{h}}</a>
+                        <small class="text-left">by Anton Shashok</small>
+                    </div>
+                    <form class="navbar-form navbar-right">
+                        <div class="form-group">
+                            <nobr>
+                                <input type="number" min="1" max="50" class="form-control" ng-model="s" ng-change="prerun()" data-toggle="tooltip" data-placement="top" title="speed">
+                                &raquo;
+                                <input type="number" min=5 max="1000" class="form-control" ng-model="w" ng-change="restartScene()" data-toggle="tooltip" data-placement="top" title="Nr of cols">
+                                x
+                                <input type="number" min=5 max="1000" class="form-control" ng-model="h" ng-change="restartScene()" data-toggle="tooltip" data-placement="top" title="Nr of rows">
+                            </nobr>
+                        </div>
+                    </form>
+                    <ul class="nav navbar-nav navbar-left" ng-if="!gameStatus">
+                        <li class="dropdown text-left">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-save"></i> Load / Save <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="" ng-click="game.download()" eat-click href="#download"><i class="fa fa-download"></i> download game</a>
+                                    <form class="hide" target="_blank" method="post" action="download.php" id="download">
+                                        <textarea name="currentStates">{{currentStates}}</textarea>
+                                        <input type="text" value="{{w}}" name="w">
+                                        <input type="text" value="{{h}}" name="h">
+                                        <input type="text" value="{{posx}}" name="posx">
+                                        <input type="text" value="{{posy}}" name="posy">
+                                        <input type="text" value="{{s}}" name="s">
+                                    </form>
+                                </li>
+                                <li>
+                                    <a class="" ng-click="game.upload()" eat-click href="#load"><i class="fa fa-upload"></i> load game</a>
+                                    <form class="hide" method="post" action="upload.php" id="upload" enctype="multipart/form-data">
+                                        <input type="hidden" name="MAX_FILE_SIZE" value="1194304" /> 
+                                        <input type="file" name="game" id="uploadfilename">
+                                    </form>
+                                </li>
+                                <li class="divider"></li>
+                                <li class="disabled">
+                                    <a class="disabled" ng-click="game.cloud_download()" eat-click href="#cloud-save"><i class="fa fa-cloud-download"></i> save to cloud</a>
+                                </li>
+                                <li class="disabled">
+                                    <a class="disabled" ng-click="game.cloud_upload()" eat-click href="#cloud-load"><i class="fa fa-cloud-upload"></i> load from cloud</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown text-left">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-flash text-warning"></i> Seeds <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="(seed_name, seed) in games">
+                                    <a class="" ng-click="loadGame(seed)" eat-click href="#load-seed"><i class="fa fa-globe"></i> {{seed_name}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li data-toggle="tooltip" data-placement="top" title="clean desk">
+                            <a class="" ng-click="clean()" eat-click ng-show="elmscount && !gameStatus" href="#gen"><i class="fa fa-fire-extinguisher text-danger"></i></a>
+                        </li>
+                        <li data-toggle="tooltip" data-placement="top" title="next generation">
+                            <a class="" ng-click="draw(true)" eat-click ng-show="!gameStatus" href="#gen"><i class="fa fa-step-forward"></i></a>
+                        </li>
+                        <li data-toggle="tooltip" data-placement="top" title="start life">
+                            <a class="" ng-click="run()" eat-click ng-show="!gameStatus" href="#play"><i class="fa fa-play"></i></a>
+                        </li>
+                        <li data-toggle="tooltip" data-placement="top" title="pause life">
+                            <a class="" ng-click="pause()" eat-click ng-show="gameStatus" href="#pause"><i class="fa fa-pause"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <script>
+                    $("[data-toggle=tooltip]").tooltip();
+        </script>
+    </body>
+</html>

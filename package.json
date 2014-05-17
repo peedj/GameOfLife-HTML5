@@ -1,0 +1,35 @@
+{
+    "name": "GameOfLife",
+    "version": "0.1.1",
+    "description": "Test qualify project",
+    "main": "Gruntfile.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/peedj/games.git"
+    },
+    "keywords": [
+        "game",
+        "life",
+        "full",
+        "universe"
+    ],
+    "author": "Anton Shashok",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/peedj/games/issues"
+    },
+    "homepage": "https://github.com/peedj/games",
+    "devDependencies": {
+        "grunt": "~0.4.0",
+        "grunt-bower-task": "~0.3.4",
+        "grunt-contrib-concat": "~0.4.0",
+        "grunt-contrib-copy": "~0.5.0",
+        "grunt-contrib-jshint": "~0.10.0",
+        "grunt-contrib-uglify": "~0.4.0",
+        "grunt-contrib-clean": "~0.5.0",
+        "grunt-contrib-cssmin": "~0.8.0"
+    }
+}
