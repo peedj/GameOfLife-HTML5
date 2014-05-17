@@ -4,6 +4,11 @@
 
 **How to build new version with Node.js npm package manager**
 
+# create directory 'components' for bower plugins download
+```shell
+mkdir components
+```
+# run install and update grunt
 ```shell
 npm install
 grunt
