@@ -16,35 +16,35 @@
                 <tbody>
                     <tr>
                         <td>
-                            <button class="btn btn-default" ng-mousedown="moveView(-1, -1)" eat-click><i class="fa fa-long-arrow-up fa-rotate-305 fa-fw"></i></button>
+                            <button class="btn btn-default" ng-mousedown="game.moveView(-1, -1)" eat-click><i class="fa fa-long-arrow-up fa-rotate-305 fa-fw"></i></button>
                         </td>
                         <td>
-                            <button class="btn btn-default" ng-mousedown="moveView(0, -1)" eat-click><i class="fa fa-long-arrow-up fa-fw"></i></button>
+                            <button class="btn btn-default" ng-mousedown="game.moveView(0, -1)" eat-click><i class="fa fa-long-arrow-up fa-fw"></i></button>
                         </td>
                         <td>
-                            <button class="btn btn-default" ng-mousedown="moveView(1, -1)" eat-click><i class="fa fa-long-arrow-up fa-rotate-45 fa-fw"></i></button>
+                            <button class="btn btn-default" ng-mousedown="game.moveView(1, -1)" eat-click><i class="fa fa-long-arrow-up fa-rotate-45 fa-fw"></i></button>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <button class="btn btn-default" ng-mousedown="moveView(-1, 0)" eat-click><i class="fa fa-long-arrow-left fa-fw"></i></button>
+                            <button class="btn btn-default" ng-mousedown="game.moveView(-1, 0)" eat-click><i class="fa fa-long-arrow-left fa-fw"></i></button>
                         </td>
                         <td>
                             <canvas id="lifeCanvas"></canvas>
                         </td>
                         <td>
-                            <button class="btn btn-default" ng-mousedown="moveView(1, 0)" eat-click><i class="fa fa-long-arrow-right fa-fw"></i></button>
+                            <button class="btn btn-default" ng-mousedown="game.moveView(1, 0)" eat-click><i class="fa fa-long-arrow-right fa-fw"></i></button>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <button class="btn btn-default" ng-mousedown="moveView(-1, 1)" eat-click><i class="fa fa-long-arrow-up fa-rotate-215 fa-fw"></i></button>
+                            <button class="btn btn-default" ng-mousedown="game.moveView(-1, 1)" eat-click><i class="fa fa-long-arrow-up fa-rotate-215 fa-fw"></i></button>
                         </td>
                         <td>
-                            <button class="btn btn-default" ng-mousedown="moveView(0, 1)" eat-click><i class="fa fa-long-arrow-down fa-fw"></i></button>
+                            <button class="btn btn-default" ng-mousedown="game.moveView(0, 1)" eat-click><i class="fa fa-long-arrow-down fa-fw"></i></button>
                         </td>
                         <td>
-                            <button class="btn btn-default" ng-mousedown="moveView(1, 1)" eat-click><i class="fa fa-long-arrow-up fa-rotate-135 fa-fw"></i></button>
+                            <button class="btn btn-default" ng-mousedown="game.moveView(1, 1)" eat-click><i class="fa fa-long-arrow-up fa-rotate-135 fa-fw"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -58,11 +58,11 @@
                     <form class="navbar-form navbar-right">
                         <div class="form-group">
                             <nobr>
-                                <input type="number" min="1" max="50" class="form-control" ng-model="s" ng-change="prerun()" data-toggle="tooltip" data-placement="top" title="speed">
+                                <input type="number" min="1" max="50" class="form-control" ng-model="s" ng-change="game.updateSpeed()" data-toggle="tooltip" data-placement="top" title="speed">
                                 &raquo;
-                                <input type="number" min=5 max="1000" class="form-control" ng-model="w" ng-change="restartScene()" data-toggle="tooltip" data-placement="top" title="Nr of cols">
+                                <input type="number" min=5 max="1000" class="form-control" ng-model="w" ng-change="game.restartScene()" data-toggle="tooltip" data-placement="top" title="Nr of cols">
                                 x
-                                <input type="number" min=5 max="1000" class="form-control" ng-model="h" ng-change="restartScene()" data-toggle="tooltip" data-placement="top" title="Nr of rows">
+                                <input type="number" min=5 max="1000" class="form-control" ng-model="h" ng-change="game.restartScene()" data-toggle="tooltip" data-placement="top" title="Nr of rows">
                             </nobr>
                         </div>
                     </form>
@@ -101,23 +101,23 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-flash text-warning"></i> Seeds <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li ng-repeat="(seed_name, seed) in games">
-                                    <a class="" ng-click="loadGame(seed)" eat-click href="#load-seed"><i class="fa fa-globe"></i> {{seed_name}}</a>
+                                    <a class="" ng-click="game.loadGame(seed)" eat-click href="#load-seed"><i class="fa fa-globe"></i> {{seed_name}}</a>
                                 </li>
                             </ul>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li data-toggle="tooltip" data-placement="top" title="clean desk">
-                            <a class="" ng-click="clean()" eat-click ng-show="elmscount && !gameStatus" href="#gen"><i class="fa fa-fire-extinguisher text-danger"></i></a>
+                            <a class="" ng-click="game.clean()" eat-click ng-show="elmscount && !gameStatus" href="#gen"><i class="fa fa-fire-extinguisher text-danger"></i></a>
                         </li>
                         <li data-toggle="tooltip" data-placement="top" title="next generation">
-                            <a class="" ng-click="draw(true)" eat-click ng-show="!gameStatus" href="#gen"><i class="fa fa-step-forward"></i></a>
+                            <a class="" ng-click="runNextGeneration(true)" eat-click ng-show="!gameStatus" href="#gen"><i class="fa fa-step-forward"></i></a>
                         </li>
                         <li data-toggle="tooltip" data-placement="top" title="start life">
-                            <a class="" ng-click="run()" eat-click ng-show="!gameStatus" href="#play"><i class="fa fa-play"></i></a>
+                            <a class="" ng-click="game.run()" eat-click ng-show="!gameStatus" href="#play"><i class="fa fa-play"></i></a>
                         </li>
                         <li data-toggle="tooltip" data-placement="top" title="pause life">
-                            <a class="" ng-click="pause()" eat-click ng-show="gameStatus" href="#pause"><i class="fa fa-pause"></i></a>
+                            <a class="" ng-click="game.pause()" eat-click ng-show="gameStatus" href="#pause"><i class="fa fa-pause"></i></a>
                         </li>
                     </ul>
                 </div>

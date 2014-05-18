@@ -27,7 +27,7 @@ module.exports = function(grunt) {
                     'components/bootstrap/dist/js/bootstrap.js',
                     // project scripts
                     'src/engine/app.js',
-                    'src/engine/controllers/controller.game.js',
+                    'src/engine/controllers/LifeAppController.js',
                     'src/engine/helpers/helper.objects.js'
                 ],
                 dest: 'build/js/scripts.js'
