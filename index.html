@@ -6,7 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <META NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW">
         <link REL="SHORTCUT ICON" HREF="favicon.ico">
-        
+
         <script src="build/js/scripts.js"></script>
         <link rel="stylesheet" type="text/css" href="build/css/styles.min.css" media="screen" />
     </head>
@@ -49,6 +49,7 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="hide" id="current-states" ng-bind="currentStates"></div>
             <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
                 <div class="container">
                     <div class="navbar-header">
@@ -111,7 +112,7 @@
                             <a class="" ng-click="game.clean()" eat-click ng-show="elmscount && !gameStatus" href="#gen"><i class="fa fa-fire-extinguisher text-danger"></i></a>
                         </li>
                         <li data-toggle="tooltip" data-placement="top" title="next generation">
-                            <a class="" ng-click="runNextGeneration(true)" eat-click ng-show="!gameStatus" href="#gen"><i class="fa fa-step-forward"></i></a>
+                            <a class="" id="next_gen_btn" ng-click="runNextGeneration(true)" eat-click ng-show="!gameStatus" href="#gen"><i class="fa fa-step-forward"></i></a>
                         </li>
                         <li data-toggle="tooltip" data-placement="top" title="start life">
                             <a class="" ng-click="game.run()" eat-click ng-show="!gameStatus" href="#play"><i class="fa fa-play"></i></a>

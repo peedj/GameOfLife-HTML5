@@ -9190,7 +9190,7 @@ return jQuery;
 }));
 
 /**
- * @license AngularJS v1.3.0-build.2711+sha.facd904
+ * @license AngularJS v1.3.0-build.2721+sha.def5b57
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -9259,7 +9259,7 @@ function minErr(module) {
       return match;
     });
 
-    message = message + '\nhttp://errors.angularjs.org/1.3.0-build.2711+sha.facd904/' +
+    message = message + '\nhttp://errors.angularjs.org/1.3.0-build.2721+sha.def5b57/' +
       (module ? module + '/' : '') + code;
     for (i = 2; i < arguments.length; i++) {
       message = message + (i == 2 ? '?' : '&') + 'p' + (i-2) + '=' +
@@ -11228,7 +11228,7 @@ function setupModuleLoader(window) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-  full: '1.3.0-build.2711+sha.facd904',    // all of these placeholder strings will be replaced by grunt's
+  full: '1.3.0-build.2721+sha.def5b57',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
   minor: 3,
   dot: 0,
@@ -15271,7 +15271,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       return linkFnFound ? compositeLinkFn : null;
 
       function compositeLinkFn(scope, nodeList, $rootElement, boundTranscludeFn) {
-        var nodeLinkFn, childLinkFn, node, $node, childScope, i, ii, n;
+        var nodeLinkFn, childLinkFn, node, $node, childScope, childTranscludeFn, i, ii, n;
 
         // copy nodeList so that linking doesn't break due to live list updates.
         var nodeListLength = nodeList.length,
@@ -15293,17 +15293,14 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             } else {
               childScope = scope;
             }
-
-            // We need to create a new boundTranscludeFn if
-            //  - a directive on this element wants to transclude
-            //  or
-            //  - there is no boundTranscludeFn already and a transcludeFn was passed in
-            if ( nodeLinkFn.transcludeOnThisElement || (!boundTranscludeFn && transcludeFn) ) {
-              boundTranscludeFn = createBoundTranscludeFn(scope, nodeLinkFn.transclude || transcludeFn);
+            childTranscludeFn = nodeLinkFn.transclude;
+            if (childTranscludeFn || (!boundTranscludeFn && transcludeFn)) {
+              nodeLinkFn(childLinkFn, childScope, node, $rootElement,
+                createBoundTranscludeFn(scope, childTranscludeFn || transcludeFn)
+              );
+            } else {
+              nodeLinkFn(childLinkFn, childScope, node, $rootElement, boundTranscludeFn);
             }
-
-            nodeLinkFn(childLinkFn, childScope, node, $rootElement, boundTranscludeFn);
-
           } else if (childLinkFn) {
             childLinkFn(scope, node.childNodes, undefined, boundTranscludeFn);
           }
@@ -15679,9 +15676,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       }
 
       nodeLinkFn.scope = newScopeDirective && newScopeDirective.scope === true;
-      nodeLinkFn.transcludeOnThisElement = hasTranscludeDirective;
-      nodeLinkFn.transclude = childTranscludeFn;
-
+      nodeLinkFn.transclude = hasTranscludeDirective && childTranscludeFn;
       previousCompileContext.hasElementTranscludeDirective = hasElementTranscludeDirective;
 
       // might be normal or delayed nodeLinkFn depending on if templateUrl is present
@@ -17801,7 +17796,13 @@ function $InterpolateProvider() {
 
   this.$get = ['$parse', '$exceptionHandler', '$sce', function($parse, $exceptionHandler, $sce) {
     var startSymbolLength = startSymbol.length,
-        endSymbolLength = endSymbol.length;
+        endSymbolLength = endSymbol.length,
+        escapedStartRegexp = new RegExp(startSymbol.replace(/./g, escape), 'g'),
+        escapedEndRegexp = new RegExp(endSymbol.replace(/./g, escape), 'g');
+
+    function escape(ch) {
+      return '\\\\\\' + ch;
+    }
 
     /**
      * @ngdoc service
@@ -17845,6 +17846,42 @@ function $InterpolateProvider() {
      * ```
      *
      * `allOrNothing` is useful for interpolating URLs. `ngSrc` and `ngSrcset` use this behavior.
+     *
+     * ####Escaped Interpolation
+     * $interpolate provides a mechanism for escaping interpolation markers. Start and end markers
+     * can be escaped by preceding each of their characters with a REVERSE SOLIDUS U+005C (backslash).
+     * It will be rendered as a regular start/end marker, and will not be interpreted as an expression
+     * or binding.
+     *
+     * This enables web-servers to prevent script injection attacks and defacing attacks, to some
+     * degree, while also enabling code examples to work without relying on the
+     * {@link ng.directive:ngNonBindable ngNonBindable} directive.
+     *
+     * **For security purposes, it is strongly encouraged that web servers escape user-supplied data,
+     * replacing angle brackets (&lt;, &gt;) with &amp;lt; and &amp;gt; respectively, and replacing all
+     * interpolation start/end markers with their escaped counterparts.**
+     *
+     * Escaped interpolation markers are only replaced with the actual interpolation markers in rendered
+     * output when the $interpolate service processes the text. So, for HTML elements interpolated
+     * by {@link ng.$compile $compile}, or otherwise interpolated with the `mustHaveExpression` parameter
+     * set to `true`, the interpolated text must contain an unescaped interpolation expression. As such,
+     * this is typically useful only when user-data is used in rendering a template from the server, or
+     * when otherwise untrusted data is used by a directive.
+     *
+     * <example>
+     *  <file name="index.html">
+     *    <div ng-init="username='A user'">
+     *      <p ng-init="apptitle='Escaping demo'">{{apptitle}}: \{\{ username = "defaced value"; \}\}
+     *        </p>
+     *      <p><strong>{{username}}</strong> attempts to inject code which will deface the
+     *        application, but fails to accomplish their task, because the server has correctly
+     *        escaped the interpolation start/end markers with REVERSE SOLIDUS U+005C (backslash)
+     *        characters.</p>
+     *      <p>Instead, the result of the attempted script injection is visible, and can be removed
+     *        from the database by an administrator.</p>
+     *    </div>
+     *  </file>
+     * </example>
      *
      * @param {string} text The text with markup to interpolate.
      * @param {boolean=} mustHaveExpression if set to true then the interpolation string must have
@@ -17896,6 +17933,12 @@ function $InterpolateProvider() {
         }
       }
 
+      forEach(separators, function(key, i) {
+        separators[i] = separators[i].
+          replace(escapedStartRegexp, startSymbol).
+          replace(escapedEndRegexp, endSymbol);
+      });
+
       if (separators.length === expressions.length) {
         separators.push('');
       }
@@ -17936,11 +17979,20 @@ function $InterpolateProvider() {
         };
 
         var stringify = function (value) {
-          if (isUndefined(value) || value === null) {
-            value = '';
+          if (value == null) { // null || undefined
+            return '';
           }
-          if (typeof value != 'string') {
-            value = toJson(value);
+          switch (typeof value) {
+            case 'string': {
+              break;
+            }
+            case 'number': {
+              value = '' + value;
+              break;
+            }
+            default: {
+              value = toJson(value);
+            }
           }
 
           return value;

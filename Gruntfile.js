@@ -1,10 +1,25 @@
 /*jshint node:true*/
 module.exports = function(grunt) {
     'use strict';
-
     // Project configuration
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        protractor: {
+          options: {
+            configFile: "referenceConf.js", // Default config file
+            keepAlive: false, // If false, the grunt process stops when the test fails.
+            noColor: false, // If true, protractor will not use colors in its output.
+            args: {
+              // Arguments passed to the command
+            }
+          },
+          your_target: {
+            options: {
+              configFile: "e2e.conf.js", // Target-specific config file
+              args: {} // Target-specific arguments
+            }
+          },
+        },
         bower: {
         install: {
           options: {
@@ -90,6 +105,7 @@ module.exports = function(grunt) {
         }
     });
     
+    grunt.loadNpmTasks('grunt-protractor-runner');
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -98,5 +114,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     // Project tasks
-    grunt.registerTask('default', ['clean', 'bower', 'jshint', 'concat', 'copy', 'uglify', "cssmin"]);
+    grunt.registerTask('default', ['clean', 'bower', 'jshint', 'concat', 'copy', 'uglify', "cssmin", 
+// Disabled, due to bug with current version of protractor for Mac OS        
+//        'protractor' 
+    ]);
 };
